@@ -80,4 +80,17 @@ class AnalyticsSummaryResponse(BaseModel):
     total_debit_volume: Decimal
     total_credit_volume: Decimal
     is_balanced: bool
+    idempotent_cached: bool = False
     working_capital: WorkingCapitalMetrics
+
+class DLQRetryResponse(BaseModel):
+    reprocessed_count: int
+    remaining_dlq: int
+    status: str
+    timestamp: datetime
+
+class FaultInjectionResponse(BaseModel):
+    simulated_failure_active: bool
+    circuit_breaker_state: str
+    dlq_count: int
+    message: str

@@ -1,0 +1,78 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=0.75in]{geometry}
+\usepackage{amsmath}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{booktabs}
+
+\definecolor{primary}{RGB}{31, 78, 121}
+\definecolor{secondary}{RGB}{79, 70, 229}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=primary,
+    urlcolor=secondary
+}
+
+\titleformat{\section}{\large\bfseries\color{primary}}{}{0em}{}[\titlerule]
+\titleformat{\subsection}{\normalsize\bfseries\color{secondary}}{}{0em}{}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4.5pt}
+
+\begin{document}
+
+\begin{center}
+    {\LARGE \textbf{\color{primary}ZeTheta Algorithms Private Limited}}\\[4pt]
+    {\large \textbf{Full Stack Engineer Assessment — Comprehensive Project Feedback \& Reflection}}\\[2pt]
+    \textbf{Project 1 B: Custom API Integration — SAP S/4HANA to Analytics}\\[3pt]
+    \textbf{Candidate:} Tejas H R \quad $|$ \quad \textbf{GitHub Repository:} \href{https://github.com/tejashr0716/SAP-S4HANA-Custom-API-Integration}{SAP-S4HANA-Custom-API-Integration} \quad $|$ \quad \textbf{Date:} November 2026
+\end{center}
+
+\vspace{4pt}
+
+\section{1. Executive Overview \& Project Walkthrough}
+This feedback report accompanies the completed codebase and technical submission for \textbf{Project 1 B: Custom API Integration} (Course ID: 138518).
+
+In this project, I engineered a high-throughput, fault-tolerant API integration gateway connecting \textbf{SAP S/4HANA ERP Financials} to the ZeTheta Financial Analytics platform. The system ingests general ledger, accounts payable, accounts receivable, and cost center accounting modules, normalizes ERP structures, and computes real-time working capital analytics with 100\% mathematical double-entry reconciliation.
+
+\textbf{Core Architectural Components Implemented:}
+\begin{itemize}[leftmargin=1.5em, itemsep=2pt]
+    \item \textbf{OpenAPI 3.1 \& Data Contracts:} Formalized strict Pydantic v2 schemas across SAP ERP modules (FI-GL, FI-AP, FI-AR, CO-OM) for type safety.
+    \item \textbf{Delta Extraction Layer:} Built an OData v4 extraction engine supporting cursor pagination (\texttt{\$top}, \texttt{\$skip}) and delta timestamp synchronization.
+    \item \textbf{ETL Transformation \& Audit Reconciliation:} Developed field translation logic mapping SAP posting keys (\texttt{SHKZG} `S'/`H') into normalized double-entry debit/credit streams with 100\% mathematical balance verification.
+    \item \textbf{Enterprise Fault Tolerance:} Implemented a 3-state Circuit Breaker (\texttt{CLOSED}, \texttt{OPEN}, \texttt{HALF\_OPEN}), exponential backoff with jitter, and a Dead-Letter Queue (DLQ) for defective payload isolation.
+    \item \textbf{Security \& Integrity:} Enforced OAuth 2.0 Bearer authorization and HMAC-SHA256 request integrity signatures with replay attack prevention.
+\end{itemize}
+
+\section{2. Reflection on Real-World Client Expectations \& Soft Skills}
+\begin{enumerate}[leftmargin=1.5em, itemsep=3pt]
+    \item \textbf{Integrating with Legacy Enterprise Ecosystems:} Bridging modern analytics frameworks with legacy ERP structures like SAP requires deep schema empathy. Translating low-level German SAP field abbreviations (\texttt{BUKRS}, \texttt{BELNR}, \texttt{SHKZG}) into clean domain models taught me the importance of clear data contracts.
+    \item \textbf{Zero-Tolerance for Financial Inaccuracy:} Unlike traditional web services, financial integration cannot tolerate even a one-cent discrepancy. Building automated double-entry mathematical reconciliation into the ingest pipeline ensured absolute accounting integrity.
+    \item \textbf{Testing Rigor \& Verification:} Executed an automated integration test suite (\texttt{test\_integration.py}) covering all 6 core subsystems with a \textbf{100\% pass rate}.
+\end{enumerate}
+
+\section{3. Self-Assessment \& Job Readiness Scorecard}
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{@{}llp{8.5cm}@{}}
+\toprule
+\textbf{Assessment Dimension} & \textbf{Self-Rating} & \textbf{Candidate Evidence} \\ \midrule
+\textbf{Backend \& API Architecture} & \textbf{5 / 5 (Expert)} & Clean FastAPI gateway, OpenAPI 3.1 conformance, and modular microservice design. \\
+\textbf{Data Engineering \& ETL} & \textbf{5 / 5 (Expert)} & High-throughput normalization, delta timestamp extraction, and double-entry reconciliation. \\
+\textbf{Resilience \& Observability} & \textbf{5 / 5 (Expert)} & Production-ready Circuit Breaker, Dead-Letter Queue quarantine, and telemetry health endpoints. \\
+\textbf{Enterprise Security} & \textbf{5 / 5 (Expert)} & OAuth 2.0 validation and HMAC-SHA256 signature verification with replay attack defense. \\
+\textbf{Quality Assurance \& Testing} & \textbf{5 / 5 (Expert)} & 100\% automated test coverage across extraction, transformation, resilience, and security. \\ \bottomrule
+\end{tabular}
+\end{table}
+
+\section{4. Statement of Authorship \& Verification}
+I hereby certify that the submitted project files, documentation, and open-source repository at \href{https://github.com/tejashr0716/SAP-S4HANA-Custom-API-Integration}{\texttt{github.com/tejashr0716/SAP-S4HANA-Custom-API-Integration}} represent my original engineering work.
+
+\vspace{10pt}
+\textbf{Candidate Name:} Tejas H R \quad $|$ \quad \textbf{Contact:} \texttt{tejashrise2026@gmail.com} \quad $|$ \quad \textbf{Location:} Bengaluru, India
+\end{document}

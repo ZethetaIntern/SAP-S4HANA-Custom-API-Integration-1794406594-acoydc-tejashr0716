@@ -4,10 +4,11 @@ Maps SAP S/4HANA raw ERP records into normalized analytical models:
 1. Field mapping & SAP code translation (SHKZG 'S' -> True/Debit, 'H' -> False/Credit)
 2. Double-entry accounting balance verification (Debit = Credit validation)
 3. Working capital, receivables (AR) & payables (AP) aggregation
+4. Idempotency & Document Deduplication enforcement
 """
 
 from decimal import Decimal
-from typing import List, Tuple
+from typing import List, Tuple, Set
 from sap_models import (
     SAPDocumentRaw,
     NormalizedFinancialTransaction,
@@ -40,20 +41,33 @@ class SAPDataTransformer:
 
     @staticmethod
     def compute_working_capital_metrics(
-        documents: List[SAPDocumentRaw]
+        documents: List[SAPDocumentRaw],
+        deduplicate: bool = True
     ) -> Tuple[WorkingCapitalMetrics, Decimal, Decimal, bool]:
         """
         Computes financial health metrics from transformed batches:
+        - Deduplicates documents using composite key (BUKRS, BELNR, GJAHR)
         - Receivables (Customer Invoices: BLART = 'DR')
         - Payables (Vendor Invoices: BLART = 'KR')
         - Mathematical Balance Verification
         """
+        seen_keys: Set[str] = set()
+        unique_docs: List[SAPDocumentRaw] = []
+
+        for doc in documents:
+            if deduplicate:
+                doc_key = f"{doc.BUKRS}:{doc.BELNR}:{doc.GJAHR}"
+                if doc_key in seen_keys:
+                    continue
+                seen_keys.add(doc_key)
+            unique_docs.append(doc)
+
         total_debit = Decimal("0.00")
         total_credit = Decimal("0.00")
         total_ar = Decimal("0.00")
         total_ap = Decimal("0.00")
 
-        for doc in documents:
+        for doc in unique_docs:
             for item in doc.ITEMS:
                 if item.SHKZG.upper() == "S":
                     total_debit += item.DMBTR
