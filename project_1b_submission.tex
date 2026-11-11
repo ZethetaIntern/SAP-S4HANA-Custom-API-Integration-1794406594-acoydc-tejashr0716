@@ -1,0 +1,107 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=0.75in]{geometry}
+\usepackage{amsmath}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{booktabs}
+
+\definecolor{primary}{RGB}{31, 78, 121}
+\definecolor{secondary}{RGB}{79, 70, 229}
+\definecolor{codebg}{RGB}{245, 247, 250}
+\definecolor{codeframe}{RGB}{220, 225, 230}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=primary,
+    urlcolor=secondary
+}
+
+\titleformat{\section}{\large\bfseries\color{primary}}{}{0em}{}[\titlerule]
+\titleformat{\subsection}{\normalsize\bfseries\color{secondary}}{}{0em}{}
+
+\lstset{
+    backgroundcolor=\color{codebg},
+    frame=single,
+    rulecolor=\color{codeframe},
+    basicstyle=\ttfamily\scriptsize,
+    breaklines=true,
+    showstringspaces=false,
+    tabsize=2
+}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+
+\begin{document}
+
+\begin{center}
+    {\LARGE \textbf{\color{primary}ZeTheta Algorithms Private Limited}}\\[4pt]
+    {\large \textbf{Full Stack Engineer Assessment — Final Project Submission}}\\[2pt]
+    \textbf{Project 1 B: Custom API Integration — SAP S/4HANA to Analytics (Course ID: 138518)}\\[3pt]
+    \textbf{Candidate:} Tejas H R \quad $|$ \quad \textbf{Submission Date:} November 2026 \quad $|$ \quad \textbf{Status:} 100\% Verified \& Passing
+\end{center}
+
+\vspace{6pt}
+
+\section{1. Executive Summary \& Compliance Matrix}
+This submission provides the complete, production-grade implementation of the \textbf{Custom API Integration Gateway} connecting \textbf{SAP S/4HANA ERP Financials} to the ZeTheta Financial Analytics platform. The system implements strict Pydantic v2 data contracts across ERP modules (FI-GL, FI-AP, FI-AR, CO-OM), delta OData extraction with cursor pagination, automated field normalization with 100\% mathematical double-entry reconciliation ($\text{Debit} == \text{Credit}$), enterprise resilience (Circuit Breaker, DLQ, exponential backoff), and OAuth 2.0 with HMAC-SHA256 signature verification.
+
+\begin{table}[h]
+\centering
+\scriptsize
+\begin{tabular}{@{}llp{8cm}@{}}
+\toprule
+\textbf{Deliverable Part} & \textbf{Status} & \textbf{Technical Implementation} \\ \midrule
+\textbf{Part 1: Integration Architecture} & \textbf{Completed} & Microservice bridge between S/4HANA and ZeTheta Analytics \\
+\textbf{Part 2: OpenAPI 3.1 \& Data Contracts} & \textbf{Completed} & OpenAPI 3.1 specification and Pydantic v2 schemas for ERP modules \\
+\textbf{Part 3: SAP Extraction Layer} & \textbf{Completed} & OData v4 simulation with cursor pagination and delta sync \\
+\textbf{Part 4: Transformation \& Reconciliation} & \textbf{Completed} & Automated normalization with 100\% Debit/Credit mathematical audit \\
+\textbf{Part 5: Resilience, Retries \& DLQ} & \textbf{Completed} & 3-state Circuit Breaker, exponential backoff, and Dead-Letter Queue \\
+\textbf{Part 6: Security Protocols} & \textbf{Completed} & OAuth 2.0 Bearer tokens and HMAC-SHA256 replay attack defense \\
+\textbf{Part 7: Full Stack Automated Testing} & \textbf{Completed} & Automated test suite (\texttt{test\_integration.py}) — \textbf{100\% pass rate} \\
+\textbf{Final Part: Technical Documentation} & \textbf{Completed} & Architecture specs, field mapping dictionaries, and runbooks \\ \bottomrule
+\end{tabular}
+\end{table}
+
+\section{2. Architecture Overview}
+The integration pipeline follows an event-driven extract-transform-load (ETL) pattern:
+\begin{itemize}[leftmargin=1.5em, itemsep=2pt]
+    \item \textbf{Extraction:} Consumes SAP S/4HANA OData services (\texttt{A\_JournalEntry}, \texttt{A\_SupplierInvoice}, \texttt{A\_CustomerInvoice}) supporting \texttt{\$top}, \texttt{\$skip}, and delta timestamps.
+    \item \textbf{Resilience:} A 3-state Circuit Breaker (\texttt{CLOSED}, \texttt{OPEN}, \texttt{HALF\_OPEN}) protects against cascading ERP timeouts. Poison pill payloads are isolated into an in-memory Dead-Letter Queue (DLQ).
+    \item \textbf{Transformation:} Translates ERP posting keys (\texttt{SHKZG} `S'/`H') into normalized double-entry debit/credit streams while verifying mathematical reconciliation.
+    \item \textbf{Security:} Enforces OAuth 2.0 token validation and HMAC-SHA256 payload integrity signatures with a strict 300-second timestamp drift limit.
+\end{itemize}
+
+\section{3. Automated Test Verification Results}
+The automated integration test suite (\texttt{test\_integration.py}) was executed with 100\% pass rate:
+\begin{lstlisting}
+============================================================
+Starting S/4HANA Custom API Integration Test Suite
+============================================================
+[PASS] Test 1: OpenAPI 3.1 specification conforms to enterprise standards.
+[PASS] Test 2: SAP extraction layer extracted 85 records across paginated cursors.
+[PASS] Test 3: 100% mathematical reconciliation verified. Debit=Credit=Rs. 1,672,500.00.
+[PASS] Test 4: Fault tolerance engine (Circuit Breaker & DLQ) verified.
+[PASS] Test 5: Security layer (OAuth 2.0 & HMAC-SHA256 replay defense) verified.
+[PASS] Test 6: End-to-end FastAPI integration gateway verified.
+============================================================
+ALL 6 AUTOMATED INTEGRATION TESTS PASSED! (100% Pass Rate)
+============================================================
+\end{lstlisting}
+
+\section{4. Production File Structure}
+\begin{itemize}[leftmargin=1.5em, itemsep=2pt]
+    \item \texttt{sap\_models.py}: Pydantic v2 schemas for raw SAP documents and analytical models.
+    \item \texttt{sap\_extractor.py}: S/4HANA OData extraction and pagination engine.
+    \item \texttt{transformer.py}: Field mapping, reconciliation audit, and working capital calculators.
+    \item \texttt{resilience.py}: Circuit breaker, retry backoff, and dead-letter queue.
+    \item \texttt{security.py}: OAuth 2.0 and HMAC-SHA256 signature verifier.
+    \item \texttt{app.py}: FastAPI integration gateway endpoints.
+    \item \texttt{test\_integration.py}: Complete automated test suite.
+\end{itemize}
+
+\end{document}
